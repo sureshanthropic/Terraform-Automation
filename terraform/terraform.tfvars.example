@@ -1,0 +1,10 @@
+gcp_project_id            = "my-gcp-landing-zone"
+billing_account           = "012345-678901-234567"
+aws_region                = "us-east-1"
+bucket_name               = "my-secure-landing-zone-bucket"
+bucket_environment        = "dev"
+bucket_lifecycle_enabled  = true
+bucket_lifecycle_days     = 30
+service_account_name      = "landing-zone-sa"
+service_account_display_name = "Landing Zone Service Account"
+service_account_roles     = ["roles/storage.objectAdmin", "roles/viewer"]

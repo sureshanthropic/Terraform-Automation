@@ -1,0 +1,5 @@
+aws_region              = "us-east-1"
+bucket_name             = "your-unique-tf-state-bucket-name"
+environment             = "dev"
+enable_lifecycle        = true
+noncurrent_version_days = 30

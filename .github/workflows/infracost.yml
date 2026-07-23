@@ -1,0 +1,60 @@
+name: Infracost
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/infracost.yml'
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/infracost.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  infracost:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Terraform init
+        run: terraform init -backend=false
+
+      - name: Generate Infracost breakdown
+        run: |
+          infracost breakdown \
+            --path=. \
+            --format=json \
+            --out-file=/tmp/infracost.json
+
+      - name: Post Infracost comment
+        if: github.event_name == 'pull_request'
+        run: |
+          infracost comment github \
+            --repo ${{ github.repository }} \
+            --pull-request ${{ github.event.pull_request.number }} \
+            --path=/tmp/infracost.json \
+            --github-token=${{ secrets.GITHUB_TOKEN }} \
+            --behavior=update
