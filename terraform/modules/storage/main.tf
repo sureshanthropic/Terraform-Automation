@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "landing_bucket" {
-  name                        = var.bucket_name
+  name                        = "mybucketname1-fors3"
   project                     = var.project_id
   location                    = var.bucket_location
   storage_class               = var.bucket_storage_class
