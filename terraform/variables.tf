@@ -60,3 +60,9 @@ variable "service_account_roles" {
   type        = list(string)
   default     = ["roles/storage.objectAdmin"]
 }
+
+variable "bucket_lifecycle_days" {
+  description = "Number of days before objects are deleted"
+  type        = number
+  default     = 30
+}
