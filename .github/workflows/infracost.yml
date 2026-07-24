@@ -6,9 +6,6 @@ on:
       - 'terraform/**'
       - '.github/workflows/infracost.yml'
   push:
-    branches:
-      - main
-      - master
     paths:
       - 'terraform/**'
       - '.github/workflows/infracost.yml'
