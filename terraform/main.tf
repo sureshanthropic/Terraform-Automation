@@ -26,6 +26,15 @@ module "storage" {
   lifecycle_target_storage_class = "STANDARD_IA"
 }
 
+module "aws_s3_bucket" {
+  source = "./modules/aws_s3_bucket"
+
+  bucket_name            = "s3_aws_bucket1"
+  environment            = "dev"
+  enable_lifecycle       = true
+  noncurrent_version_days = 30
+}
+
 output "gcp_project_id" {
   value = module.landing_zone.project_id
 }
@@ -40,4 +49,8 @@ output "gcp_service_account_email" {
 
 output "gcp_storage_bucket_name" {
   value = module.storage.bucket_name
+}
+
+output "aws_s3_bucket_name" {
+  value = module.aws_s3_bucket.bucket_name
 }
