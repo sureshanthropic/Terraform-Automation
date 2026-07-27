@@ -31,8 +31,20 @@ jobs:
         with:
           terraform_version: 1.8.5
 
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::071853465066:role/Github_aws_account
+          aws-region: us-east-1
+
+      - name: Configure GCP Credentials via OIDC
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/376082230878/locations/global/workloadIdentityPools/github-work-flow/providers/github-work-flow'
+          service_account: 'my-app-sa@project-2a6cdcd2-cf93-47c3-959.iam.gserviceaccount.com'
+
       - name: Terraform init
-        run: terraform init 
+        run: terraform init
 
       - name: Terraform plan
         run: terraform plan -out=tfplan.binary -no-color
@@ -62,7 +74,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-plan
-          path: /tmp
+          path: terraform
 
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
@@ -74,8 +86,8 @@ jobs:
           infracost breakdown \
             --path=. \
             --format=json \
-            --terraform-plan-file=/tmp/tfplan.json \
-            --out-file=/tmp/infracost.json
+            --terraform-plan-file=tfplan.json \
+            --out-file=infracost.json
 
       - name: Post Infracost comment
         if: github.event_name == 'pull_request'
@@ -83,7 +95,7 @@ jobs:
           infracost comment github \
             --repo ${{ github.repository }} \
             --pull-request ${{ github.event.pull_request.number }} \
-            --path=/tmp/infracost.json \
+            --path=infracost.json \
             --github-token=${{ secrets.GITHUB_TOKEN }} \
             --behavior=update
 
