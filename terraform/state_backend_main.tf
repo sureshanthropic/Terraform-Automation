@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 module "state_backend" {
   source = "./modules/state_backend"
 

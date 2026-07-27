@@ -43,12 +43,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "state_bucket_lifecycle" {
     id     = "expire-old-versions"
     status = "Enabled"
 
+    filter {
+      prefix = ""
+    }
+
     noncurrent_version_expiration {
       noncurrent_days = var.noncurrent_version_days
     }
   }
-}
-
-output "bucket_name" {
-  value = aws_s3_bucket.state_bucket.id
 }

@@ -4,6 +4,24 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "environment" {
+  description = "Environment tag value"
+  type        = string
+  default     = "dev"
+}
+
+variable "enable_lifecycle" {
+  description = "Enable lifecycle management for old versions"
+  type        = bool
+  default     = true
+}
+
+variable "noncurrent_version_days" {
+  description = "Days to retain noncurrent versions"
+  type        = number
+  default     = 30
+}
+
 variable "gcp_project_id" {
   description = "GCP project ID for the landing zone"
   type        = string

@@ -7,9 +7,9 @@ module "landing_zone" {
   project_name                 = "Landing Zone"
   vpc_name                     = "landing-vpc"
   prd_subnet_name              = "prd-subnet"
-  prd_subnet_cidr              = "10.0.1.0/24"
+  prd_subnet_cidr              = "192.168.1.0/24"
   dev_subnet_name              = "dev-subnet"
-  dev_subnet_cidr              = "10.0.2.0/24"
+  dev_subnet_cidr              = "192.168.2.0/24"
   service_account_name         = var.service_account_name
   service_account_display_name = var.service_account_display_name
   service_account_roles        = var.service_account_roles
@@ -26,14 +26,6 @@ module "storage" {
   lifecycle_target_storage_class = "STANDARD_IA"
 }
 
-module "aws_s3_bucket" {
-  source = "./modules/aws_s3_bucket"
-
-  bucket_name            = "s3_aws_bucket1"
-  environment            = "dev"
-  enable_lifecycle       = true
-  noncurrent_version_days = 30
-}
 
 output "gcp_project_id" {
   value = module.landing_zone.project_id
@@ -51,6 +43,3 @@ output "gcp_storage_bucket_name" {
   value = module.storage.bucket_name
 }
 
-output "aws_s3_bucket_name" {
-  value = module.aws_s3_bucket.bucket_name
-}
